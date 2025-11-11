@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenAI Image Description Tester</title>
+
+</head>
+<body>
+  <div class="container">
+    <h1>OpenAI Image Description Tester</h1>
+
+    <label>
+      <span>Add your OpenAI Key here</span>
+      <input id="apiKey" type="text">
+    </label>
+    <input type="file" id="imageInput" accept="image/*" multiple>
+    <button id="describeBtn" onclick="console.log('analyzing images...');" disabled>Describe Images</button>
+    <div
+    style="
+      display: grid;
+      grid-template-columns: repeat(2, 200px);
+    "
+    id="preview-container"
+    ></div>
+
+    <div id="result"></div>
+  </div>
+  <script src="script-openai-promises.js"></script>
+</body>
+</html>
