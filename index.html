@@ -3,120 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenAI Image Description Tester</title>
-
-  <style>
-    .all-sections {
-      display: flex;
-      justify-content: space-around;
-    }
-    .separation-line {
-      border: 1px dashed;
-    }
-    #apiKey,
-    #wish {
-      width: 100%;
-    }
-    #spinner,
-    #spinnerTest {
-      display: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 3px solid rgba(0,0,0,0.12);
-      border-top-color: #2563eb;
-      animation: spin 0.8s linear infinite;
-      margin: 8px 0;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    #describeBtnAsync,
-    #asyncBtn {
-      background-color: #a5d8ff;
-      border: 2px solid #97cef8;
-      padding: 8px;
-      border-radius: 4px;
-    }
-    #describeBtnSync,
-    #syncBtn {
-      background-color: #ffec99;
-      border: 2px solid #f7e17f;
-      padding: 8px;
-      border-radius: 4px;
-    }
-    button {
-      cursor: pointer;
-    }
-  </style>
+  <title>Tester</title>
 </head>
 <body>
   <div class="container">
-    <h1 style="text-align: center;">Tester for Asynchronous and Synchronous requests <br> with or without OpenAI</h1>
+    <h1>Simple Test Description Tester</h1>
 
     <div class="all-sections">
-      <section class="openai">
-        <h2>OpenAI Image Description Tester</h2>
-        <div style="display: flex; flex-direction: column;">
-          <label>
-            <span>Add your OpenAI Key here</span>
-            <input id="apiKey" type="text" placeholder="sk...">
-          </label>
-
-          <input type="file" id="imageInput" accept="image/*" multiple>
-        </div>
-        <br>
-        <div
-          style="
-          display: flex;
-          gap: 12px;
-        "
-        >
-          <button id="describeBtnAsync" onclick="console.log('analyzing images...');" disabled>Describe Images (Asynchronous)</button>
-          <button id="describeBtnSync" onclick="console.log('analyzing images...');" disabled>Describe Images (Synchronous)</button>
-          <button id="restart">Restart</button>
-        </div>
-
-        <br>
-        <span id="totalTime"></span>
-        <div id="spinner"></div>
-        <br>
-        <div
-        style="
-          display: grid;
-          grid-template-columns: repeat(2, 200px);
-        "
-        id="preview-container"
-        ></div>
-      </section>
-
-      <span class="separation-line"></span>
-
       <section class="simple-test">
-        <h2>Simple Image Description Tester</h2>
+        <h2>Synchronous Request</h2>
         <div>
           <label>
-            <span>Make a Wish (they can be true)</span>
-            <input id="wish" type="text" placeholder="add wishes separated by comma, ex.: go see sister, go to the club, go sing">
+            <span>Choose a number</span>
+            <input type="number" name="" id="number">
           </label>
         </div>
-        <br>
-        <br>
+
         <div
           style="
           display: flex;
           gap: 12px;
         "
         >
-          <button id="asyncBtn" onclick="console.log('adding wish...');" disabled>Add a Wish (Asynchronous)</button>
-          <button id="syncBtn" onclick="console.log('adding wish...');" disabled>Add a Wish (Synchronous)</button>
+          <button id="syncBtn" onclick="console.log('adding wish...');" disabled>Add number (Synchronous)</button>
         </div>
-
-        <br>
-        <span id="totalTimeTest"></span>
-        <div id="spinnerTest"></div>
-        <br>
 
         <div
         style="
@@ -125,11 +35,12 @@
         "
         id="preview-container-test"
         ></div>
+
+        <div class="results"></div>
       </section>
     </div>
   </div>
 
-  <script src="script-openai-promises.js"></script>
-  <script src="script-simple-test.js"></script>
+  <script src="sync-script-simple-test.js"></script>
 </body>
 </html>
