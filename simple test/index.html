@@ -6,6 +6,9 @@
   <title>OpenAI Image Description Tester</title>
 
   <style>
+    #wish {
+      width: 40%;
+    }
     #spinner {
       display: none;
       width: 28px;
@@ -42,7 +45,7 @@
     <h1>Simple Image Description Tester</h1>
     <label>
       <span>Make a Wish (they can be true)</span>
-      <input id="task" type="text" placeholder="add wishes separated by comma, ex.: go see sister, go to the club, go sing">
+      <input id="wish" type="text" placeholder="add wishes separated by comma, ex.: go see sister, go to the club, go sing">
     </label>
     <br>
     <div
@@ -51,7 +54,7 @@
       gap: 12px;
     "
     >
-      <button id="asyncBtn" onclick="console.log('adding task...');" disabled>Add Task (Asynchronous)</button>
+      <button id="asyncBtn" onclick="console.log('adding wish...');" disabled>Add Wish (Asynchronous)</button>
     </div>
     <div
     style="

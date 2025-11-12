@@ -1,16 +1,16 @@
-const taskInputElement = document.getElementById("task");
+const wishInputElement = document.getElementById("wish");
 const previewContainer = document.getElementById("preview-container");
 const asyncBtn = document.getElementById("asyncBtn");
 const spinner = document.getElementById("spinner");
 const totalTime = document.getElementById("totalTime");
 
-let tasks = [];
+let wishes = [];
 let startTime;
 
-// Enable button only when there's a task provided
+// Enable button only when there's a wish provided
 function checkReady() {
-  const hasTask = taskInputElement.value;
-  const shouldDisable = !(hasTask);
+  const hasWish = wishInputElement.value;
+  const shouldDisable = !(hasWish);
   asyncBtn.disabled = shouldDisable;
 }
 
@@ -21,48 +21,48 @@ function requestTotalTime() {
 }
 
 // Async requests here
-function processTask(task) {
+function processWish(wish) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const isSuccess = Math.random() > 0.3;
-      task.status = isSuccess ? "success" : "error";
-      resolve(task);
-    }, task.delay);
+      wish.status = isSuccess ? "success" : "error";
+      resolve(wish);
+    }, wish.delay);
   })
 }
 
-function renderTasks() {
+function renderWishes() {
   previewContainer.innerHTML = "";
-  tasks.forEach(task => {
-    const color = task.status === "pending"  ? "gray" :
-                  task.status === "success"  ? "green" : "red"
+  wishes.forEach(wish => {
+    const color = wish.status === "pending"  ? "gray" :
+                  wish.status === "success"  ? "green" : "red"
 
-    const taskCard = `
+    const wishCard = `
       <div style="border: 1px solid #ccc; padding: 8px; margin: 4px; border-radius: 4px;">
-        <strong>${task.name}</strong>
-        <p style="color: ${color}">${task.status}</p>
+        <strong>${wish.name}</strong>
+        <p style="color: ${color}">${wish.status}</p>
       </div>
     `;
-    previewContainer.insertAdjacentHTML("beforeend", taskCard);
+    previewContainer.insertAdjacentHTML("beforeend", wishCard);
   });
 }
 
-// single task
+// single wish
 // asyncBtn.addEventListener("click", async () => {
-//   const taskName = taskInputElement.value;
-//   if (!taskName) return;
+//   const wishName = wishInputElement.value;
+//   if (!wishName) return;
 
-//   // add new task to array
-//   const newTask = {
-//     name: taskName,
+//   // add new wish to array
+//   const newWish = {
+//     name: wishName,
 //     status: "pending",
 //     delay: 1000 + Math.random() * 3000
 //   };
-//   tasks.push(newTask);
+//   wishs.push(newWish);
 
-//   // render pending tasks
-//   renderTasks();
-//   taskInputElement.value = "";
+//   // render pending wishes
+//   renderWishes();
+//   wishInputElement.value = "";
 //   asyncBtn.disabled = true;
 
 //   // start time here
@@ -71,58 +71,58 @@ function renderTasks() {
 //   spinner.style.display = "block";
 
 //   try {
-//     // wait for the task to be completed
-//     await processTask(newTask);
+//     // wait for the wish to be completed
+//     await processWish(newWish);
 //   } catch (error) {
 //     console.log(error);
 //   }
 
-//   renderTasks();
+//   renderWishes();
 //   requestTotalTime();
 
 //   spinner.style.display = "none";
 //   asyncBtn.disabled = false;
 // })
 
-// multiple tasks
+// multiple wishes
 asyncBtn.addEventListener("click", async () => {
-  const tasksNames = taskInputElement.value
+  const wishesNames = wishInputElement.value
     .split(",")
-    .map(task => task.trim())
+    .map(wish => wish.trim())
     .filter(Boolean);
 
-  if (!tasksNames) return;
+  if (!wishesNames) return;
 
-  // add new task to array
-  const allTasks = tasksNames.map(taskName => {
-    const newTask = {
-      name: taskName,
+  // add new wish to array
+  const allWishes = wishesNames.map(wishName => {
+    const newWish = {
+      name: wishName,
       status: "pending",
       delay: 1000 + Math.random() * 3000
     };
-    tasks.push(newTask);
-    return processTask(newTask);
+    wishes.push(newWish);
+    return processwish(newWish);
   });
 
-  // render pending tasks
-  renderTasks();
-  taskInputElement.value = "";
+  // render pending wishes
+  renderWishes();
+  wishInputElement.value = "";
   asyncBtn.disabled = true;
 
   // start time here
   if (!startTime) startTime = Date.now();
   spinner.style.display = "block";
 
-  // wait for all tasks to complete
-  await Promise.allSettled(allTasks);
+  // wait for all wishes to complete
+  await Promise.allSettled(allWishes);
 
-  // render updated tasks
-  renderTasks();
+  // render updated wishes
+  renderWishes();
   requestTotalTime();
 
   spinner.style.display = "none";
   asyncBtn.disabled = false;
 })
 
-taskInputElement.addEventListener("input", checkReady);
+wishInputElement.addEventListener("input", checkReady);
 checkReady();
