@@ -1,6 +1,7 @@
 const syncBtnTest = document.getElementById("syncBtn");
 const previewContainerTest = document.getElementById("preview-container-test");
 const resultsDiv = document.querySelector(".results");
+const totalTime = document.getElementById("total-time");
 const allRequests = [];
 
 const datas = [
@@ -27,6 +28,8 @@ async function runTestSync() {
   resultsDiv.textContent = "Running datas..."
   allRequests.length = 0;
 
+  let start = Date.now();
+
   for (const data of datas) {
     try {
       const response = await syncTestRequestPromise(data);
@@ -41,7 +44,11 @@ async function runTestSync() {
     }).join("");
   }
 
-  syncBtnTest.disabled = true;
+  let timeTaken = Date.now() - start;
+  totalTime.textContent = `Total time: ${ (timeTaken/1000).toFixed(2) } seconds`;
 }
 
-syncBtnTest.addEventListener("click", () => runTestSync());
+syncBtnTest.addEventListener("click", () => {
+  syncBtnTest.disabled = true;
+  runTestSync();
+});
