@@ -12,12 +12,14 @@
     <div class="all-sections">
       <section class="simple-test">
         <h2>Synchronous Request</h2>
-        <div>
-          <label>
-            <span>Choose a number</span>
-            <input type="number" name="" id="number">
-          </label>
-        </div>
+        <pre>
+            [
+              {description: "go to the gym", delay: 1000, status: false},
+              {description: "go shopping", delay: 4000, status: true},
+              {description: "go see sister", delay: 3000, status: true},
+              {description: "go to the club", delay: 2000, status: false}
+            ]
+        </pre>
 
         <div
           style="
@@ -25,7 +27,7 @@
           gap: 12px;
         "
         >
-          <button id="syncBtn" onclick="console.log('adding wish...');" disabled>Add number (Synchronous)</button>
+          <button id="syncBtn" onclick="console.log('adding wish...');">Send synchronous request </button>
         </div>
 
         <div

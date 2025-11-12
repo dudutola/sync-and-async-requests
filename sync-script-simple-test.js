@@ -1,25 +1,24 @@
-const inputNumberElement = document.getElementById("number");
 const syncBtnTest = document.getElementById("syncBtn");
 const previewContainerTest = document.getElementById("preview-container-test");
 const resultsDiv = document.querySelector(".results");
 const allRequests = [];
 
 const datas = [
-  {delay: 1000, status: false},
-  {delay: 4000, status: true},
-  {delay: 3000, status: true},
-  {delay: 2000, status: false}
+  {description: "go to the gym", delay: 1000, status: false},
+  {description: "go shopping", delay: 4000, status: true},
+  {description: "go see sister", delay: 3000, status: true},
+  {description: "go to the club", delay: 2000, status: false}
 ]
 
-function syncTestRequestPromise(delay, status) {
+function syncTestRequestPromise(data) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (status) {
-        resolve("Success");
+      if (data.status) {
+        resolve(`Success: ${data.description}`);
       } else {
-        reject(new Error("Error"));
+        reject(new Error(`Error: ${data.description}`));
       }
-    }, delay);
+    }, data.delay);
   });
 }
 
@@ -30,7 +29,7 @@ async function runTestSync() {
 
   for (const data of datas) {
     try {
-      const response = await syncTestRequestPromise(data.delay, data.status);
+      const response = await syncTestRequestPromise(data);
       allRequests.push(response);
     } catch (error) {
       const response = error.message;
@@ -44,7 +43,5 @@ async function runTestSync() {
 
   syncBtnTest.disabled = true;
 }
-
-inputNumberElement.addEventListener("input", () => syncBtnTest.disabled = false);
 
 syncBtnTest.addEventListener("click", () => runTestSync());
