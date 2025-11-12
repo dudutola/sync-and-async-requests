@@ -5,7 +5,9 @@ const describeBtnSync = document.getElementById("describeBtnSync");
 const restartBtn = document.getElementById("restart");
 const apiKeyInput = document.getElementById("apiKey");
 const spinner = document.getElementById("spinner");
+const totalTime = document.getElementById("totalTime");
 
+let countRequestSeconds = 0;
 
 // Enable button only when image and API key are provided
 function checkReady() {
@@ -16,12 +18,21 @@ function checkReady() {
   describeBtnSync.disabled = shouldDisable;
 }
 
+// function to restar all
 restartBtn.addEventListener("click", () => {
   apiKeyInput.value = "";
   imageInputElement.value = "";
   previewContainer.innerHTML = "";
+  countRequestSeconds = 0;
+  totalTime.textContent = "";
 })
 
+
+// function to count request total time
+function requestTotalTime() {
+  countRequestSeconds ++;
+  totalTime.textContent = `Total time: ${countRequestSeconds}s`;
+}
 
 imageInputElement.addEventListener('change', (event) => {
   const files = event.target.files;
@@ -59,7 +70,7 @@ describeBtnAsync.addEventListener("click", async () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey.value}`
+          'Authorization': `Bearer ${apiKeyInput.value}`
         },
         body: JSON.stringify({
           model: 'gpt-4o',
@@ -105,6 +116,7 @@ describeBtnAsync.addEventListener("click", async () => {
     } else {
       result.value.imgElement.nextElementSibling.textContent = result.value.error;
     }
+    requestTotalTime();
   }
 });
 
@@ -121,7 +133,7 @@ describeBtnSync.addEventListener("click", async () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey.value}`
+          'Authorization': `Bearer ${apiKeyInput.value}`
         },
         body: JSON.stringify({
           model: 'gpt-4o',
@@ -147,6 +159,8 @@ describeBtnSync.addEventListener("click", async () => {
 
       const data = await response.json();
       img.nextElementSibling.textContent = data.choices[0].message.content;
+
+      requestTotalTime();
     } catch (error) {
       img.nextElementSibling.textContent = "Error: " + (error.error?.message || error.message)
     }
