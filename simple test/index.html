@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenAI Image Description Tester</title>
+
+  <style>
+    #spinner {
+      display: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 3px solid rgba(0,0,0,0.12);
+      border-top-color: #2563eb;
+      animation: spin 0.8s linear infinite;
+      margin: 8px 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    #asyncBtn {
+      background-color: #a5d8ff;
+      border: 2px solid #97cef8;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    #describeBtnSync {
+      background-color: #ffec99;
+      border: 2px solid #f7e17f;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Simple Image Description Tester</h1>
+    <label>
+      <span>Add your task here</span>
+      <input id="task" type="text" placeholder="le sapin le sapin...">
+    </label>
+    <br>
+    <div
+      style="
+      display: flex;
+      gap: 12px;
+    "
+    >
+      <button id="asyncBtn" onclick="console.log('adding task...');" disabled>Add Task (Asynchronous)</button>
+    </div>
+    <div
+    style="
+      display: grid;
+      grid-template-columns: repeat(2, 200px);
+    "
+    id="preview-container"
+    ></div>
+
+    <span id="totalTime"></span>
+
+    <div id="spinner"></div>
+  </div>
+  <script src="script-simple-test.js"></script>
+</body>
+</html>

@@ -18,7 +18,7 @@ function checkReady() {
   describeBtnSync.disabled = shouldDisable;
 }
 
-// function to restar all
+// function to restart all
 restartBtn.addEventListener("click", () => {
   apiKeyInput.value = "";
   imageInputElement.value = "";
