@@ -20,6 +20,7 @@ function requestTotalTime() {
   totalTime.textContent = `Total time: ${totalSeconds}s`;
 }
 
+// Async requests here
 function processTask(task) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -46,18 +47,62 @@ function renderTasks() {
   });
 }
 
+// single task
+// asyncBtn.addEventListener("click", async () => {
+//   const taskName = taskInputElement.value;
+//   if (!taskName) return;
 
+//   // add new task to array
+//   const newTask = {
+//     name: taskName,
+//     status: "pending",
+//     delay: 1000 + Math.random() * 3000
+//   };
+//   tasks.push(newTask);
+
+//   // render pending tasks
+//   renderTasks();
+//   taskInputElement.value = "";
+//   asyncBtn.disabled = true;
+
+//   // start time here
+//   if (!startTime) startTime = Date.now();
+
+//   spinner.style.display = "block";
+
+//   try {
+//     // wait for the task to be completed
+//     await processTask(newTask);
+//   } catch (error) {
+//     console.log(error);
+//   }
+
+//   renderTasks();
+//   requestTotalTime();
+
+//   spinner.style.display = "none";
+//   asyncBtn.disabled = false;
+// })
+
+// multiple tasks
 asyncBtn.addEventListener("click", async () => {
-  const taskName = taskInputElement.value;
-  if (!taskName) return;
+  const tasksNames = taskInputElement.value
+    .split(",")
+    .map(task => task.trim())
+    .filter(Boolean);
+
+  if (!tasksNames) return;
 
   // add new task to array
-  const newTask = {
-    name: taskName,
-    status: "pending",
-    delay: 1000 + Math.random() * 3000
-  };
-  tasks.push(newTask);
+  const allTasks = tasksNames.map(taskName => {
+    const newTask = {
+      name: taskName,
+      status: "pending",
+      delay: 1000 + Math.random() * 3000
+    };
+    tasks.push(newTask);
+    return processTask(newTask);
+  });
 
   // render pending tasks
   renderTasks();
@@ -66,16 +111,12 @@ asyncBtn.addEventListener("click", async () => {
 
   // start time here
   if (!startTime) startTime = Date.now();
-
   spinner.style.display = "block";
 
-  try {
-    // wait for the task to be completed
-    await processTask(newTask);
-  } catch (error) {
-    console.log(error);
-  }
+  // wait for all tasks to complete
+  await Promise.allSettled(allTasks);
 
+  // render updated tasks
   renderTasks();
   requestTotalTime();
 
