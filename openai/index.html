@@ -20,6 +20,18 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+    #describeBtnAsync {
+      background-color: #a5d8ff;
+      border: 2px solid #97cef8;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    #describeBtnSync {
+      background-color: #ffec99;
+      border: 2px solid #f7e17f;
+      padding: 8px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -34,7 +46,16 @@
       <input type="file" id="imageInput" accept="image/*" multiple>
     </div>
     <br>
-    <button id="describeBtn" onclick="console.log('analyzing images...');" disabled>Describe Images</button>
+    <div
+      style="
+      display: flex;
+      gap: 12px;
+    "
+    >
+      <button id="describeBtnAsync" onclick="console.log('analyzing images...');" disabled>Describe Images (Asynchronous)</button>
+      <button id="describeBtnSync" onclick="console.log('analyzing images...');" disabled>Describe Images (Synchronous)</button>
+      <button id="restart">Restart</button>
+    </div>
     <div
     style="
       display: grid;

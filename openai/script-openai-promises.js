@@ -1,6 +1,8 @@
 const imageInputElement = document.getElementById("imageInput");
 const previewContainer = document.getElementById("preview-container");
-const describeBtn = document.getElementById("describeBtn");
+const describeBtnAsync = document.getElementById("describeBtnAsync");
+const describeBtnSync = document.getElementById("describeBtnSync");
+const restartBtn = document.getElementById("restart");
 const apiKeyInput = document.getElementById("apiKey");
 const spinner = document.getElementById("spinner");
 
@@ -9,8 +11,16 @@ const spinner = document.getElementById("spinner");
 function checkReady() {
   const hasImage = imageInputElement.files && imageInputElement.files[0];
   const hasKey = apiKeyInput.value.trim().length > 0;
-  describeBtn.disabled = !(hasImage && hasKey);
+  const shouldDisable = !(hasImage && hasKey);
+  describeBtnAsync.disabled = shouldDisable;
+  describeBtnSync.disabled = shouldDisable;
 }
+
+restartBtn.addEventListener("click", () => {
+  apiKeyInput.value = "";
+  imageInputElement.value = "";
+  previewContainer.innerHTML = "";
+})
 
 
 imageInputElement.addEventListener('change', (event) => {
@@ -27,7 +37,7 @@ imageInputElement.addEventListener('change', (event) => {
           <p class="caption"></p>
         </div>
         `
-        previewContainer.insertAdjacentHTML('beforeend', cardImageElement);
+        previewContainer.insertAdjacentHTML("beforeend", cardImageElement);
       }
       reader.readAsDataURL(file);
     }
@@ -35,11 +45,13 @@ imageInputElement.addEventListener('change', (event) => {
     checkReady();
   }
 })
-apiKeyInput.addEventListener('input', checkReady);
+apiKeyInput.addEventListener("input", checkReady);
 
-describeBtn.addEventListener("click", async () => {
-  const imgElements = document.querySelectorAll('img');
-  describeBtn.disabled = true;
+
+// Async requests here
+describeBtnAsync.addEventListener("click", async () => {
+  const imgElements = document.querySelectorAll("img");
+  describeBtnAsync.disabled = describeBtnSync.disabled = true;
   spinner.style.display = "block";
 
   const allRequests = Array.from(imgElements).map((imgElement) => {
@@ -94,4 +106,51 @@ describeBtn.addEventListener("click", async () => {
       result.value.imgElement.nextElementSibling.textContent = result.value.error;
     }
   }
+});
+
+
+// Sync requests here
+describeBtnSync.addEventListener("click", async () => {
+  const imgElements = document.querySelectorAll('img');
+  describeBtnAsync.disabled = describeBtnSync.disabled = true;
+  spinner.style.display = "block";
+
+  for (const img of imgElements) {
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey.value}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            {
+              role: 'user',
+              content: [
+                { type: 'text', text: 'Describe this image in detail.' },
+                {
+                  type: 'image_url',
+                  image_url: {
+                    url: `${img.src}`
+                  }
+                }
+              ]
+            }
+          ],
+          max_tokens: 300
+        })
+      });
+
+      if (!response.ok) throw await response.json();
+
+      const data = await response.json();
+      img.nextElementSibling.textContent = data.choices[0].message.content;
+    } catch (error) {
+      img.nextElementSibling.textContent = "Error: " + (error.error?.message || error.message)
+    }
+  }
+
+  spinner.style.display = "none";
 });
