@@ -1,8 +1,8 @@
-const imageInputElement = document.getElementById('imageInput');
-const previewContainer = document.getElementById('preview-container');
-const describeBtn = document.getElementById('describeBtn');
-const apiKeyInput = document.getElementById('apiKey');
-
+const imageInputElement = document.getElementById("imageInput");
+const previewContainer = document.getElementById("preview-container");
+const describeBtn = document.getElementById("describeBtn");
+const apiKeyInput = document.getElementById("apiKey");
+const spinner = document.getElementById("spinner");
 
 
 // Enable button only when image and API key are provided
@@ -38,9 +38,9 @@ imageInputElement.addEventListener('change', (event) => {
 apiKeyInput.addEventListener('input', checkReady);
 
 describeBtn.addEventListener("click", async () => {
-  describeBtn.disabled = true;
-
   const imgElements = document.querySelectorAll('img');
+  describeBtn.disabled = true;
+  spinner.style.display = "block";
 
   const allRequests = Array.from(imgElements).map((imgElement) => {
     return fetch('https://api.openai.com/v1/chat/completions', {
@@ -84,6 +84,8 @@ describeBtn.addEventListener("click", async () => {
   })
 
   const allPromisess = await Promise.allSettled(allRequests);
+
+  spinner.style.display = 'none';
 
   for (const result of allPromisess) {
     if (result.status === 'fulfilled') {
