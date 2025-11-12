@@ -7,7 +7,7 @@ const apiKeyInput = document.getElementById("apiKey");
 const spinner = document.getElementById("spinner");
 const totalTime = document.getElementById("totalTime");
 
-let countRequestSeconds = 0;
+let startTime;
 
 // Enable button only when image and API key are provided
 function checkReady() {
@@ -23,15 +23,17 @@ restartBtn.addEventListener("click", () => {
   apiKeyInput.value = "";
   imageInputElement.value = "";
   previewContainer.innerHTML = "";
-  countRequestSeconds = 0;
+  describeBtnAsync.disabled = true;
+  describeBtnSync.disabled = true;
+  startTime = 0;
   totalTime.textContent = "";
 })
 
 
 // function to count request total time
 function requestTotalTime() {
-  countRequestSeconds ++;
-  totalTime.textContent = `Total time: ${countRequestSeconds}s`;
+  const totalSeconds = ((Date.now() - startTime) / 1000).toFixed(2);
+  totalTime.textContent = `Total time: ${totalSeconds}s`;
 }
 
 imageInputElement.addEventListener('change', (event) => {
@@ -64,6 +66,8 @@ describeBtnAsync.addEventListener("click", async () => {
   const imgElements = document.querySelectorAll("img");
   describeBtnAsync.disabled = describeBtnSync.disabled = true;
   spinner.style.display = "block";
+
+  startTime = Date.now();
 
   const allRequests = Array.from(imgElements).map((imgElement) => {
     return fetch('https://api.openai.com/v1/chat/completions', {
@@ -116,8 +120,8 @@ describeBtnAsync.addEventListener("click", async () => {
     } else {
       result.value.imgElement.nextElementSibling.textContent = result.value.error;
     }
-    requestTotalTime();
   }
+  requestTotalTime();
 });
 
 
@@ -126,6 +130,8 @@ describeBtnSync.addEventListener("click", async () => {
   const imgElements = document.querySelectorAll('img');
   describeBtnAsync.disabled = describeBtnSync.disabled = true;
   spinner.style.display = "block";
+
+  startTime = Date.now();
 
   for (const img of imgElements) {
     try {
