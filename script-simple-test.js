@@ -1,24 +1,24 @@
 const wishInputElement = document.getElementById("wish");
-const previewContainer = document.getElementById("preview-container");
+const previewContainerTest = document.getElementById("preview-container-test");
 const asyncBtn = document.getElementById("asyncBtn");
 const syncBtn = document.getElementById("syncBtn");
-const spinner = document.getElementById("spinner");
-const totalTime = document.getElementById("totalTime");
+const spinnerTest = document.getElementById("spinnerTest");
+const totalTimeTest = document.getElementById("totalTimeTest");
 
 let wishes = [];
-let startTime;
+let startTimeTest;
 
 // Enable button only when there's a wish provided
-function checkReady() {
+function checkReadyTest() {
   const hasWish = wishInputElement.value;
   const shouldDisable = !(hasWish);
   asyncBtn.disabled = shouldDisable;
 }
 
 // function to count request total time
-function requestTotalTime() {
-  const totalSeconds = ((Date.now() - startTime) / 1000).toFixed(2);
-  totalTime.textContent = `Total time: ${totalSeconds}s`;
+function requestTotalTimeTest() {
+  const totalSeconds = ((performance.now() - startTimeTest) / 1000).toFixed(2);
+  totalTimeTest.textContent = `Total time: ${totalSeconds}s`;
 }
 
 // Async requests here
@@ -33,7 +33,7 @@ function processWish(wish) {
 }
 
 function renderWishes() {
-  previewContainer.innerHTML = "";
+  previewContainerTest.innerHTML = "";
   wishes.forEach(wish => {
     const color = wish.status === "pending"  ? "gray" :
                   wish.status === "success"  ? "green" : "red"
@@ -44,7 +44,7 @@ function renderWishes() {
         <p style="color: ${color}">${wish.status}</p>
       </div>
     `;
-    previewContainer.insertAdjacentHTML("beforeend", wishCard);
+    previewContainerTest.insertAdjacentHTML("beforeend", wishCard);
   });
 }
 
@@ -67,9 +67,9 @@ function renderWishes() {
 //   asyncBtn.disabled = true;
 
 //   // start time here
-//   if (!startTime) startTime = Date.now();
+//   if (!startTimeTest) startTimeTest = performance.now();
 
-//   spinner.style.display = "block";
+//   spinnerTest.style.display = "block";
 
 //   try {
 //     // wait for the wish to be completed
@@ -79,19 +79,19 @@ function renderWishes() {
 //   }
 
 //   renderWishes();
-//   requestTotalTime();
+//   requestTotalTimeTest();
 
-//   spinner.style.display = "none";
+//   spinnerTest.style.display = "none";
 //   asyncBtn.disabled = false;
 // })
 
 // multiple wishes
 asyncBtn.addEventListener("click", async () => {
-  previewContainer.innerHTML = "";
+  previewContainerTest.innerHTML = "";
   wishes = []
 
   // start time here
-  startTime = Date.now();
+  startTimeTest = performance.now();
 
   const wishesNames = wishInputElement.value
     .split(",")
@@ -116,16 +116,16 @@ asyncBtn.addEventListener("click", async () => {
   wishInputElement.value = "";
   asyncBtn.disabled = true;
 
-  spinner.style.display = "block";
+  spinnerTest.style.display = "block";
 
   // wait for all wishes to complete
   await Promise.allSettled(allWishes);
 
-  // render updated wishes
+  // render upperformanced wishes
   renderWishes();
-  requestTotalTime();
+  requestTotalTimeTest();
 
-  spinner.style.display = "none";
+  spinnerTest.style.display = "none";
   asyncBtn.disabled = false;
 })
 
@@ -135,5 +135,5 @@ asyncBtn.addEventListener("click", async () => {
 
 // })
 
-wishInputElement.addEventListener("input", checkReady);
-checkReady();
+wishInputElement.addEventListener("input", checkReadyTest);
+checkReadyTest();

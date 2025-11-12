@@ -32,7 +32,7 @@ restartBtn.addEventListener("click", () => {
 
 // function to count request total time
 function requestTotalTime() {
-  const totalSeconds = ((Date.now() - startTime) / 1000).toFixed(2);
+  const totalSeconds = ((performance.now() - startTime) / 1000).toFixed(2);
   totalTime.textContent = `Total time: ${totalSeconds}s`;
 }
 
@@ -67,7 +67,7 @@ describeBtnAsync.addEventListener("click", async () => {
   describeBtnAsync.disabled = describeBtnSync.disabled = true;
   spinner.style.display = "block";
 
-  startTime = Date.now();
+  startTime = performance.now();
 
   const allRequests = Array.from(imgElements).map((imgElement) => {
     return fetch('https://api.openai.com/v1/chat/completions', {
@@ -131,7 +131,7 @@ describeBtnSync.addEventListener("click", async () => {
   describeBtnAsync.disabled = describeBtnSync.disabled = true;
   spinner.style.display = "block";
 
-  startTime = Date.now();
+  startTime = performance.now();
 
   for (const img of imgElements) {
     try {
