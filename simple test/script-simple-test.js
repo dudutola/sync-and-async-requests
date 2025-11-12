@@ -1,6 +1,7 @@
 const wishInputElement = document.getElementById("wish");
 const previewContainer = document.getElementById("preview-container");
 const asyncBtn = document.getElementById("asyncBtn");
+const syncBtn = document.getElementById("syncBtn");
 const spinner = document.getElementById("spinner");
 const totalTime = document.getElementById("totalTime");
 
@@ -86,12 +87,18 @@ function renderWishes() {
 
 // multiple wishes
 asyncBtn.addEventListener("click", async () => {
+  previewContainer.innerHTML = "";
+  wishes = []
+
+  // start time here
+  startTime = Date.now();
+
   const wishesNames = wishInputElement.value
     .split(",")
     .map(wish => wish.trim())
     .filter(Boolean);
 
-  if (!wishesNames) return;
+  if (wishesNames.length === 0) return;
 
   // add new wish to array
   const allWishes = wishesNames.map(wishName => {
@@ -101,7 +108,7 @@ asyncBtn.addEventListener("click", async () => {
       delay: 1000 + Math.random() * 3000
     };
     wishes.push(newWish);
-    return processwish(newWish);
+    return processWish(newWish);
   });
 
   // render pending wishes
@@ -109,8 +116,6 @@ asyncBtn.addEventListener("click", async () => {
   wishInputElement.value = "";
   asyncBtn.disabled = true;
 
-  // start time here
-  if (!startTime) startTime = Date.now();
   spinner.style.display = "block";
 
   // wait for all wishes to complete
@@ -123,6 +128,12 @@ asyncBtn.addEventListener("click", async () => {
   spinner.style.display = "none";
   asyncBtn.disabled = false;
 })
+
+
+// Sync requests here
+// syncBtn.addEventListener("click", async () => {
+
+// })
 
 wishInputElement.addEventListener("input", checkReady);
 checkReady();
