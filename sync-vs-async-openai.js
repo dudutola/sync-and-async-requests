@@ -124,7 +124,7 @@ describeBtnAsync.addEventListener("click", async () => {
       }
 
       const dataResponse = await response.json();
-      return await { imgElement: imgElement, description: dataResponse.choices[0].message.content };
+      return { imgElement: imgElement, description: dataResponse.choices[0].message.content };
     } catch (error_1) {
       throw { imgElement: imgElement, error: error_1 };
     }
