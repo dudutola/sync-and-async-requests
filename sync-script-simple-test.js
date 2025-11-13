@@ -1,8 +1,8 @@
 const syncBtnTest = document.getElementById("syncBtn");
-const previewContainerTest = document.getElementById("preview-container-test");
-const resultsDiv = document.querySelector(".results");
+const asyncBtnTest = document.getElementById("asyncBtn");
+const testSyncResultsDiv = document.getElementById("test-sync-results");
+const testAsyncResultsDiv = document.getElementById("test-async-results");
 const totalTime = document.getElementById("total-time");
-const allRequests = [];
 
 const datas = [
   {description: "go to the gym", delay: 1000, status: false},
@@ -11,7 +11,7 @@ const datas = [
   {description: "go to the club", delay: 2000, status: false}
 ]
 
-function syncTestRequestPromise(data) {
+function testRequestPromise(data) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (data.status) {
@@ -25,21 +25,20 @@ function syncTestRequestPromise(data) {
 
 // run synchronously, one after another
 async function runTestSync() {
-  resultsDiv.textContent = "Running datas..."
-  allRequests.length = 0;
-
+  testSyncResultsDiv.textContent = "Running tests..."
+  allRequests = [];
   let start = Date.now();
 
   for (const data of datas) {
     try {
-      const response = await syncTestRequestPromise(data);
+      const response = await testRequestPromise(data);
       allRequests.push(response);
     } catch (error) {
       const response = error.message;
       allRequests.push(response)
     }
 
-    resultsDiv.innerHTML = allRequests.map(result => {
+    testSyncResultsDiv.innerHTML = allRequests.map(result => {
       return `<span>${result}</span><br>`;
     }).join("");
   }
@@ -48,7 +47,40 @@ async function runTestSync() {
   totalTime.textContent = `Total time: ${ (timeTaken/1000).toFixed(2) } seconds`;
 }
 
+// run asynchrnously, all at the same time
+async function runTestAsync() {
+  testAsyncResultsDiv.textContent = "Running tests..."
+
+  let start = Date.now();
+
+  const allRequests = datas.map(data => {
+    return testRequestPromise(data);
+  })
+
+  const allPromises = await Promise.allSettled(allRequests);
+
+  testAsyncResultsDiv.innerHTML = allPromises.map(result => {
+    if (result.status === 'fulfilled'){
+      return `<span style="color: green;">${result.value}</span><br>`;
+    }
+    if (result.status === 'rejected'){
+      return `<span style="color: red;">${result.reason.message}</span><br>`;
+    }
+  }).join("");
+
+  let timeTaken = Date.now() - start;
+  totalTime.textContent = `Total time: ${ (timeTaken/1000).toFixed(2) } seconds`;
+}
+
+
 syncBtnTest.addEventListener("click", () => {
   syncBtnTest.disabled = true;
+  // consider passing targetElement to later select next sibling
   runTestSync();
 });
+
+asyncBtnTest.addEventListener("click", () => {
+  asyncBtnTest.disabled = true;
+  // consider passing targetElement to later select next sibling
+  runTestAsync();
+})

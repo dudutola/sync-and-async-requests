@@ -12,7 +12,6 @@
 
     <div class="all-sections">
       <section class="simple-test">
-        <h2>Synchronous Request</h2>
         <pre>
             [
               {description: "go to the gym", delay: 1000, status: false},
@@ -22,24 +21,21 @@
             ]
         </pre>
 
-        <div
-          style="
-          display: flex;
-          gap: 12px;
-        "
-        >
-          <button id="syncBtn" onclick="console.log('adding wish...');">Send synchronous request </button>
+        <div style="display: flex; gap: 1rem;">
+          <div>
+            <h2>Synchronous Request</h2>
+            <button id="syncBtn">Send synchronous request </button>
+            <div id="test-sync-results"></div>
+          </div>
+
+          <div>
+            <h2>Asynchronous Request</h2>
+            <button id="asyncBtn">Send asynchronous request </button>
+            <div id="test-async-results"></div>
+          </div>
         </div>
 
-        <div
-        style="
-          display: grid;
-          grid-template-columns: repeat(2, 200px);
-        "
-        id="preview-container-test"
-        ></div>
 
-        <div class="results"></div>
       </section>
     </div>
   </div>
