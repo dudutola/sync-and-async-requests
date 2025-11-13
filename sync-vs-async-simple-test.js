@@ -23,6 +23,11 @@ function testRequestPromise(data) {
   });
 }
 
+function showTotalTime(startTime) {
+  let timeTaken = Date.now() - startTime;
+  totalTime.textContent = `Total time: ${ (timeTaken/1000).toFixed(2) } seconds`;
+}
+
 // run synchronously, one after another
 async function runTestSync() {
   testSyncResultsDiv.textContent = "Running tests..."
@@ -43,8 +48,9 @@ async function runTestSync() {
     }).join("");
   }
 
-  let timeTaken = Date.now() - start;
-  totalTime.textContent = `Total time: ${ (timeTaken/1000).toFixed(2) } seconds`;
+  // let timeTaken = Date.now() - start;
+  // totalTime.textContent = `Total time: ${ (timeTaken/1000).toFixed(2) } seconds`;
+  showTotalTime(start);
 }
 
 // run asynchrnously, all at the same time
@@ -68,8 +74,7 @@ async function runTestAsync() {
     }
   }).join("");
 
-  let timeTaken = Date.now() - start;
-  totalTime.textContent = `Total time: ${ (timeTaken/1000).toFixed(2) } seconds`;
+  showTotalTime(start);
 }
 
 

@@ -35,14 +35,10 @@ imageInputElement.addEventListener("change", (e) => {
 // sync requests
 describeBtnSync.addEventListener("click", async () => {
   const imgElements = document.querySelectorAll("img");
-  const captionElement = document.querySelector(".caption");
+
+  let start = Date.now();
 
   for (const imgElement of imgElements) {
-    // if nada in caption add
-    // if (imgElement.nextElementSibling.textContent) {
-    //   captionElement.textContent = "Running data...";
-    //   imgElement.nextElementSibling.textContent = "Running data...";
-    // }
     imgElement.nextElementSibling.textContent = "Describing image...";
 
     try {
@@ -81,12 +77,16 @@ describeBtnSync.addEventListener("click", async () => {
       imgElement.nextElementSibling.textContent = "Error: " + error.message;
     }
   }
+
+  showTotalTime(start);
 })
 
 
 // async requests
 describeBtnAsync.addEventListener("click", async () => {
   const imgElements = document.querySelectorAll("img");
+
+  let start = Date.now();
 
   const allRequests = Array.from(imgElements).map(async (imgElement) => {
     imgElement.nextElementSibling.textContent = "Describing image...";
@@ -139,4 +139,6 @@ describeBtnAsync.addEventListener("click", async () => {
       result.value.imgElement.nextElementSibling.textContent = result.value.error;
     }
   }
+
+  showTotalTime(start);
 })
