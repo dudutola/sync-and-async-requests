@@ -19,11 +19,12 @@ imageInputElement.addEventListener("change", (e) => {
       reader.onload = function (event) {
         const imageCard = `
           <div class="card-image" style="display: flex; gap: 1rem;" >
-            <img src="${event.target.result}" alt="" style="width: 200px;">
+            <img src="${event.target.result}" alt="" style="width: 200px; object-fit:cover;">
             <p style="flex: 1;" class="caption"></p>
           </div>
         `;
 
+        previewContainer.innerHTML = '';
         previewContainer.insertAdjacentHTML("beforeend", imageCard);
       }
       reader.readAsDataURL(file);
