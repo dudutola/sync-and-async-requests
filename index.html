@@ -7,7 +7,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Simple Test Description Tester</h1>
+    <h1>Description Tester</h1>
     <span id="total-time"></span>
 
     <div class="all-sections">
@@ -23,23 +23,40 @@
 
         <div style="display: flex; gap: 1rem;">
           <div>
-            <h2>Synchronous Request</h2>
+            <h2>Synchronous Request (Test)</h2>
             <button id="syncBtn">Send synchronous request </button>
             <div id="test-sync-results"></div>
           </div>
 
           <div>
-            <h2>Asynchronous Request</h2>
+            <h2>Asynchronous Request (Test)</h2>
             <button id="asyncBtn">Send asynchronous request </button>
             <div id="test-async-results"></div>
           </div>
         </div>
+      </section>
 
+      <section class="openai">
+        <div style="display: flex; gap: 1rem;">
+          <div>
+            <h2>Synchronous Request with OpenAI</h2>
+            <label>
+              <span>Add your OpenAI Key here</span>
+              <input id="apiKey" type="text" placeholder="sk...">
+            </label>
+            <input type="file" id="imageInput" accept="image/*" multiple>
 
+            <button id="describeBtnSync">Describe Images (Synchronous)</button>
+
+            <div id="preview-container-sync"></div>
+            <div id="openai-sync-results"></div>
+          </div>
+        </div>
       </section>
     </div>
   </div>
 
-  <script src="sync-script-simple-test.js"></script>
+  <script src="sync-vs-async-simple-test.js"></script>
+  <script src="sync-vs-async-openai.js"></script>
 </body>
 </html>
