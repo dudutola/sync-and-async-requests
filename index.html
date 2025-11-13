@@ -12,6 +12,7 @@
 
     <div class="all-sections">
       <section class="simple-test">
+        <h2>Test</h2>
         <pre>
             [
               {description: "go to the gym", delay: 1000, status: false},
@@ -23,13 +24,13 @@
 
         <div style="display: flex; gap: 1rem;">
           <div>
-            <h2>Synchronous Request (Test)</h2>
+            <h3>Synchronous Request (Test)</h3>
             <button id="syncBtn">Send synchronous request </button>
             <div id="test-sync-results"></div>
           </div>
 
           <div>
-            <h2>Asynchronous Request (Test)</h2>
+            <h3>Asynchronous Request (Test)</h3>
             <button id="asyncBtn">Send asynchronous request </button>
             <div id="test-async-results"></div>
           </div>
@@ -37,32 +38,37 @@
       </section>
 
       <section class="openai">
+        <h2>OpenAI</h2>
+
+        <label>
+          <span>Add your OpenAI Key here</span>
+          <input id="apiKey" type="text" placeholder="sk...">
+        </label>
+        <input type="file" id="imageInput" accept="image/*" multiple>
+
         <div style="display: flex; gap: 1rem;">
           <div>
-            <h2>Synchronous Request with OpenAI</h2>
-            <label>
-              <span>Add your OpenAI Key here</span>
-              <input id="apiKey" type="text" placeholder="sk...">
-            </label>
-            <input type="file" id="imageInput" accept="image/*" multiple>
-
+            <h3>Synchronous Request with OpenAI</h3>
             <button id="describeBtnSync">Describe Images (Synchronous)</button>
 
-            <div id="preview-container-sync"></div>
             <div id="openai-sync-results"></div>
           </div>
 
           <div>
-            <h2>Asynchronous Request with OpenAI</h2>
+            <h3>Asynchronous Request with OpenAI</h3>
             <button id="describeBtnAsync">Describe Images (Asynchronous)</button>
 
-            <div id="preview-container-async"></div>
             <div id="openai-async-results"></div>
           </div>
         </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;" id="preview-container"></div>
+
       </section>
     </div>
   </div>
+
+  <footer style="height: 200px;"></footer>
 
   <script src="sync-vs-async-simple-test.js"></script>
   <script src="sync-vs-async-openai.js"></script>
