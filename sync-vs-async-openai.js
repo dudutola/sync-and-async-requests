@@ -8,6 +8,9 @@ const openaiSyncResults = document.getElementById("openai-sync-results");
 const describeBtnAsync = document.getElementById("describeBtnAsync");
 const openaiAsyncResults = document.getElementById("openai-async-results");
 
+// spinner
+const spinner = document.getElementById("spinner");
+
 // display images
 imageInputElement.addEventListener("change", (e) => {
   const files = e.target.files;
@@ -34,8 +37,16 @@ imageInputElement.addEventListener("change", (e) => {
 // sync requests
 describeBtnSync.addEventListener("click", async () => {
   const imgElements = document.querySelectorAll("img");
+  const captionElement = document.querySelector(".caption");
 
   for (const imgElement of imgElements) {
+    // if nada in caption add
+    // if (imgElement.nextElementSibling.textContent) {
+    //   captionElement.textContent = "Running data...";
+    //   imgElement.nextElementSibling.textContent = "Running data...";
+    // }
+    imgElement.nextElementSibling.textContent = "Describing image...";
+
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -67,6 +78,7 @@ describeBtnSync.addEventListener("click", async () => {
 
       const dataResponse = await response.json();
       imgElement.nextElementSibling.textContent = dataResponse.choices[0].message.content;
+      // captionElement.textContent = dataResponse.choices[0].message.content;
     } catch (error) {
       imgElement.nextElementSibling.textContent = "Error: " + error.message;
     }
@@ -79,6 +91,8 @@ describeBtnAsync.addEventListener("click", async () => {
   const imgElements = document.querySelectorAll("img");
 
   const allRequests = Array.from(imgElements).map(async (imgElement) => {
+    imgElement.nextElementSibling.textContent = "Describing image...";
+
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
