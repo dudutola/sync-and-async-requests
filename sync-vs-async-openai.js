@@ -8,8 +8,6 @@ const openaiSyncResults = document.getElementById("openai-sync-results");
 const describeBtnAsync = document.getElementById("describeBtnAsync");
 const openaiAsyncResults = document.getElementById("openai-async-results");
 
-// spinner
-const spinner = document.getElementById("spinner");
 
 // display images
 imageInputElement.addEventListener("change", (e) => {
