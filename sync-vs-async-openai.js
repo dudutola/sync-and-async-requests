@@ -1,8 +1,13 @@
 const apiKey = document.getElementById("apiKey");
 const imageInputElement = document.getElementById("imageInput");
+// sync
 const describeBtnSync = document.getElementById("describeBtnSync");
 const previewContainerSync = document.getElementById("preview-container-sync");
 const openaiSyncResults = document.getElementById("openai-sync-results");
+// async
+const describeBtnAsync = document.getElementById("describeBtnAsync");
+const previewContainerAsync = document.getElementById("preview-container-async");
+const openaiAsyncResults = document.getElementById("openai-async-results");
 
 // display images
 imageInputElement.addEventListener("change", (e) => {
@@ -27,51 +32,7 @@ imageInputElement.addEventListener("change", (e) => {
 })
 
 
-// describeBtnSync.addEventListener("click", async () => {
-//   const images = Array.from(imageInputElement.files);
-
-//   for (const image of images) {
-//     const reader = new FileReader();
-
-//     reader.onload = async () => {
-//       const base64 = reader.result.split(",")[1];
-
-//       const response = await fetch('https://api.openai.com/v1/chat/completions', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization': `Bearer ${apiKey.value}`
-//         },
-//         body: JSON.stringify({
-//           model: 'gpt-4o',
-//           messages: [
-//             {
-//               role: 'user',
-//               content: [
-//                 { type: 'text', text: 'Describe this image in detail.' },
-//                 {
-//                   type: 'image_url',
-//                   image_url: {
-//                     url: `data:image/jpeg;base64,${base64}`
-//                   }
-//                 }
-//               ]
-//             }
-//           ],
-//           max_tokens: 300
-//         })
-//       });
-
-//       if (!response.ok) throw await response.json();
-
-//       const dataResponse = await response.json();
-//       console.log(dataResponse)
-//     }
-//     reader.readAsDataURL(image);
-//   }
-// })
-
-
+// sync requests
 describeBtnSync.addEventListener("click", async () => {
   const imgElements = document.querySelectorAll("img");
 
@@ -109,6 +70,63 @@ describeBtnSync.addEventListener("click", async () => {
       img.nextElementSibling.textContent = dataResponse.choices[0].message.content;
     } catch (error) {
       img.nextElementSibling.textContent = "Error: " + error.message;
+    }
+  }
+})
+
+
+// async requests
+describeBtnAsync.addEventListener("click", async () => {
+  const imgElements = document.querySelectorAll("img");
+
+  const allRequests = Array.from(imgElements).map((imgElement) => {
+    return fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey.value}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'Describe this image in detail.' },
+              {
+                type: 'image_url',
+                image_url: {
+                  url: `${imgElement.src}`
+                }
+              }
+            ]
+          }
+        ],
+        max_tokens: 300
+      })
+    })
+    .then(async (response) => {
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error?.message);
+      }
+
+      const dataResponse = await response.json();
+      return { imgElement: imgElement, description: dataResponse.choices[0].message.content }
+    })
+    .catch((error) => {
+      throw { imgElement: imgElement, error: error }
+    })
+  })
+
+  // allpromises
+  const allPromises = await Promise.allSettled(allRequests);
+
+  for (const result of allPromises) {
+    if (result.status === "fulfilled") {
+      result.value.imgElement.nextElementSibling.textContent = result.value.description;
+    } else {
+      result.value.imgElement.nextElementSibling.textContent = result.value.error;
     }
   }
 })
