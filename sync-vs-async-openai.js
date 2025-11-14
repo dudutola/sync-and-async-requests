@@ -21,6 +21,8 @@ imageInputElement.addEventListener("change", (e) => {
   const files = e.target.files;
 
   if (files.length > 0) {
+    previewContainer.innerHTML = "";
+
     for (const file of files) {
       const reader = new FileReader();
       reader.onload = function (event) {
@@ -31,7 +33,6 @@ imageInputElement.addEventListener("change", (e) => {
           </div>
         `;
 
-        previewContainer.innerHTML = '';
         previewContainer.insertAdjacentHTML("beforeend", imageCard);
       }
       reader.readAsDataURL(file);
