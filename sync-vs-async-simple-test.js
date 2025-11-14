@@ -48,8 +48,6 @@ async function runTestSync() {
     }).join("");
   }
 
-  // let timeTaken = Date.now() - start;
-  // totalTime.textContent = `Total time: ${ (timeTaken/1000).toFixed(2) } seconds`;
   showTotalTime(start);
 }
 

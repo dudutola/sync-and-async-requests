@@ -8,6 +8,13 @@ const openaiSyncResults = document.getElementById("openai-sync-results");
 const describeBtnAsync = document.getElementById("describeBtnAsync");
 const openaiAsyncResults = document.getElementById("openai-async-results");
 
+// check if inputs not empty
+function checkReady() {
+  const hasApiKey = apiKey.value.trim().length > 0;
+  const shouldDisable = !hasApiKey;
+  describeBtnSync.disabled = shouldDisable;
+  describeBtnAsync.disabled = shouldDisable;
+}
 
 // display images
 imageInputElement.addEventListener("change", (e) => {
@@ -31,6 +38,9 @@ imageInputElement.addEventListener("change", (e) => {
     }
   }
 })
+
+apiKey.addEventListener("input", checkReady);
+checkReady();
 
 async function apiFetch(image) {
   return await fetch('https://api.openai.com/v1/chat/completions', {
@@ -115,7 +125,6 @@ describeBtnAsync.addEventListener("click", async () => {
     if (result.status === "fulfilled") {
       result.value.imgElement.nextElementSibling.textContent = result.value.description;
     } else {
-      console.log(result.reason)
       result.value.imgElement.nextElementSibling.textContent = result.value.error;
     }
   }
