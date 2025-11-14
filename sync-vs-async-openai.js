@@ -32,6 +32,33 @@ imageInputElement.addEventListener("change", (e) => {
   }
 })
 
+async function apiFetch(image) {
+  return await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey.value}`
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o',
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: 'Describe this image in detail.' },
+            {
+              type: 'image_url',
+              image_url: {
+                url: `${image.src}`
+              }
+            }
+          ]
+        }
+      ],
+      max_tokens: 300
+    })
+  });
+}
 
 // sync requests
 describeBtnSync.addEventListener("click", async () => {
@@ -43,32 +70,7 @@ describeBtnSync.addEventListener("click", async () => {
     imgElement.nextElementSibling.textContent = "Describing image...";
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey.value}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o',
-          messages: [
-            {
-              role: 'user',
-              content: [
-                { type: 'text', text: 'Describe this image in detail.' },
-                {
-                  type: 'image_url',
-                  image_url: {
-                    url: `${imgElement.src}`
-                  }
-                }
-              ]
-            }
-          ],
-          max_tokens: 300
-        })
-      });
-
+      const response = await apiFetch(imgElement);
       if (!response.ok) throw await response.json();
 
       const dataResponse = await response.json();
@@ -93,31 +95,7 @@ describeBtnAsync.addEventListener("click", async () => {
     imgElement.nextElementSibling.textContent = "Describing image...";
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey.value}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o',
-          messages: [
-            {
-              role: 'user',
-              content: [
-                { type: 'text', text: 'Describe this image in detail.' },
-                {
-                  type: 'image_url',
-                  image_url: {
-                    url: `${imgElement.src}`
-                  }
-                }
-              ]
-            }
-          ],
-          max_tokens: 300
-        })
-      });
+      const response = await apiFetch(imgElement);
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error?.message);
@@ -137,6 +115,7 @@ describeBtnAsync.addEventListener("click", async () => {
     if (result.status === "fulfilled") {
       result.value.imgElement.nextElementSibling.textContent = result.value.description;
     } else {
+      console.log(result.reason)
       result.value.imgElement.nextElementSibling.textContent = result.value.error;
     }
   }
