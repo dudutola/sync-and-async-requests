@@ -86,7 +86,6 @@ describeBtnSync.addEventListener("click", async () => {
 
       const dataResponse = await response.json();
       imgElement.nextElementSibling.textContent = dataResponse.choices[0].message.content;
-      // captionElement.textContent = dataResponse.choices[0].message.content;
     } catch (error) {
       imgElement.nextElementSibling.textContent = "Error: " + error.message;
     }
@@ -101,6 +100,30 @@ describeBtnAsync.addEventListener("click", async () => {
   const imgElements = document.querySelectorAll("img");
 
   let start = Date.now();
+  // const allRequests = [];
+
+  // for (const imgElement of imgElements) {
+  //   imgElement.nextElementSibling.textContent = "Describing image...";
+
+  //   try {
+  //     const response = await apiFetch(imgElement);
+  //     if (!response.ok) {
+  //       const error = await response.json();
+  //       throw new Error(error.error?.message);
+  //     }
+
+  //     const dataResponse = await response.json();
+  //     allRequests.push({
+  //       imgElement: imgElement,
+  //       description: dataResponse.choices[0].message.content
+  //     });
+  //   } catch (error_1) {
+  //      allRequests.push({
+  //       imgElement: imgElement,
+  //       error: error_1
+  //     });
+  //   }
+  // }
 
   const allRequests = Array.from(imgElements).map(async (imgElement) => {
     imgElement.nextElementSibling.textContent = "Describing image...";
@@ -118,6 +141,7 @@ describeBtnAsync.addEventListener("click", async () => {
       throw { imgElement: imgElement, error: error_1 };
     }
   })
+
 
   // allpromises
   const allPromises = await Promise.allSettled(allRequests);
